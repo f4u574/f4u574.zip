@@ -1,7 +1,7 @@
 /* === f4u574.zip === */
 /* your stylesheet. edit freely. */
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap');
 
 :root {
     --bg: #ffffff;
@@ -10,8 +10,9 @@
     --light: #bbb;
     --border: #e0e0e0;
     --hover: #000;
-    --nav-width: 320px;
-    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+    --nav-width: 40%;
+    --sans: 'Geist', sans-serif;
+    --mono: 'Geist Mono', monospace;
     --pink: #d4a5b5;
     --grey-light: #d9d9d9;
 }
