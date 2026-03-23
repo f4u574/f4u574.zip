@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>f4u574.zip</title>
+    <style>
+        /* === f4u574.zip === */
+        
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+        
+        :root {
+            --bg: #ffffff;
+            --fg: #1a1a1a;
+            --accent: #888;
+            --light: #bbb;
+            --border: #e0e0e0;
+            --hover: #000;
+            --nav-width: 320px;
+            --mono: 'IBM Plex Mono', 'Courier New', monospace;
+            --pink: #d4a5b5;
+            --grey-light: #d9d9d9;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--mono);
+            background: var(--bg);
+            color: var(--fg);
+            font-size: 13px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        ::selection { background: var(--fg); color: var(--bg); }
+
+        a { color: var(--fg); text-decoration: none; }
+        a:hover { color: var(--hover); }
+
+        /* === HEADER === */
+        .site-header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 18px 24px 0;
+            background: var(--bg);
+            z-index: 100;
+        }
+        .site-title {
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+        .site-subtitle {
+            text-align: right;
+            font-size: 11px;
+            line-height: 1.5;
+            color: var(--accent);
+        }
+        .site-subtitle .author {
+            font-weight: 500;
+            color: var(--fg);
+        }
+
+        /* === BURGER === */
+        .burger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 200;
+        }
+        .burger span {
+            display: block;
+            width: 20px;
+            height: 1px;
+            background: var(--fg);
+            margin: 5px 0;
+            transition: all 0.2s;
+        }
+        .burger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+        .burger.open span:nth-child(2) { opacity: 0; }
+        .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+        /* === MAIN LAYOUT === */
+        .layout {
+            display: flex;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* === LEFT NAV === */
+        .nav-pane {
+            width: var(--nav-width);
+            min-width: var(--nav-width);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .nav-entries {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+        }
+        .nav-entries::-webkit-scrollbar { width: 3px; }
+        .nav-entries::-webkit-scrollbar-track { background: transparent; }
+        .nav-entries::-webkit-scrollbar-thumb { background: var(--border); }
+
+        /* category toggles */
+        .nav-category {
+            margin-bottom: 6px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 12px;
+            letter-spacing: 0.03em;
+        }
+        .nav-category .toggle-icon { 
+            display: inline-block; 
+            width: 12px; 
+            color: var(--accent);
+            font-size: 11px;
+        }
+        .nav-category:hover { color: var(--hover); }
+
+        .nav-list {
+            list-style: none;
+            margin: 0 0 14px 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .nav-list.collapsed { max-height: 0; margin-bottom: 6px; }
+        
+        .nav-item {
+            display: flex;
+            gap: 8px;
+            padding: 2px 0 2px 16px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: color 0.1s;
+            line-height: 1.6;
+        }
+        .nav-item:hover { color: var(--hover); }
+        .nav-item.active { font-weight: 500; }
+        .nav-item .date {
+            color: var(--light);
+            white-space: nowrap;
+            font-size: 11px;
+        }
+        .nav-item .title { flex: 1; }
+
+        /* === DAILY COMPOSITION === */
+        .daily-zone {
+            border-top: 1px solid var(--border);
+            padding: 16px 20px;
+            min-height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        .daily-label {
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            color: var(--light);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .daily-composition {
+            position: relative;
+            height: 260px;
+            font-size: 11px;
+        }
+        .daily-composition .frag {
+            position: absolute;
+        }
+        .frag-text {
+            font-size: 11px;
+            line-height: 1.5;
+            max-width: 160px;
+        }
+        .frag-keyword {
+            font-size: 13px;
+            letter-spacing: 0.05em;
+        }
+        .frag-image {
+            display: block;
+        }
+        .frag-coord {
+            font-size: 10px;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+        }
+        .frag-quote {
+            font-style: italic;
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.3;
+        }
+        .frag-date {
+            font-size: 10px;
+            color: var(--light);
+        }
+        /* mini audio player in daily zone */
+        .mini-player {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .mini-player .play-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--fg);
+            background: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            transition: all 0.15s;
+        }
+        .mini-player .play-btn:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+        .mini-player .track-info {
+            font-size: 10px;
+            color: var(--accent);
+        }
+
+        /* === CONTENT PANE === */
+        .content-pane {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 40px 60px;
+        }
+        .content-pane::-webkit-scrollbar { width: 3px; }
+        .content-pane::-webkit-scrollbar-track { background: transparent; }
+        .content-pane::-webkit-scrollbar-thumb { background: var(--border); }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 32px;
+        }
+        .entry-title {
+            font-size: 14px;
+            font-weight: 400;
+        }
+        .entry-date {
+            font-size: 11px;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+        .entry-meta {
+            font-size: 10px;
+            color: var(--light);
+            margin-top: 4px;
+            letter-spacing: 0.03em;
+        }
+
+        .entry-content {
+            max-width: 580px;
+        }
+        .entry-content p {
+            margin-bottom: 1.3rem;
+            text-align: left;
+        }
+        .entry-content .bullet-item {
+            padding-left: 12px;
+            margin-bottom: 1.3rem;
+            position: relative;
+        }
+        .entry-content .bullet-item::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+        }
+        .entry-content blockquote {
+            border-left: 1px solid var(--accent);
+            padding-left: 16px;
+            margin: 24px 0;
+            color: var(--accent);
+            font-style: italic;
+        }
+        .entry-content img {
+            max-width: 100%;
+            margin: 20px 0;
+            display: block;
+        }
+        .entry-content hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 28px 0;
+        }
+        .entry-content .footnote {
+            font-size: 10px;
+            color: var(--accent);
+            vertical-align: super;
+            cursor: pointer;
+        }
+        .entry-content .footnote:hover {
+            color: var(--fg);
+        }
+        .entry-content .tag {
+            font-size: 10px;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        .entry-content .tag:hover {
+            color: var(--fg);
+            border-color: var(--fg);
+        }
+        /* audio player in entries */
+        .audio-player {
+            margin: 20px 0;
+            padding: 12px 0;
+        }
+        .audio-player audio {
+            width: 100%;
+            height: 32px;
+            outline: none;
+        }
+        .audio-player audio::-webkit-media-controls-panel {
+            background: var(--bg);
+        }
+        .audio-label {
+            font-size: 10px;
+            color: var(--accent);
+            margin-bottom: 6px;
+            letter-spacing: 0.03em;
+        }
+
+        /* entry images */
+        .entry-image {
+            margin: 24px 0;
+        }
+        .entry-image-block {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+        .entry-image-caption {
+            font-size: 10px;
+            color: var(--accent);
+            margin-top: 6px;
+        }
+        /* color blocks as image placeholders */
+        .color-block {
+            width: 100%;
+            height: 300px;
+            display: block;
+            margin: 24px 0;
+        }
+
+        /* entry connections */
+        .entry-connections {
+            margin-top: 40px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 11px;
+            color: var(--accent);
+        }
+        .entry-connections a {
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+        }
+        .entry-connections a:hover {
+            color: var(--fg);
+            border-color: var(--fg);
+        }
+
+        /* entry nav arrows */
+        .entry-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 24px;
+            font-size: 11px;
+        }
+        .entry-nav a {
+            color: var(--accent);
+        }
+        .entry-nav a:hover { color: var(--fg); }
+
+        /* footnotes section */
+        .footnotes-section {
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 11px;
+            color: var(--accent);
+            line-height: 1.6;
+        }
+
+        /* === MOBILE === */
+        @media (max-width: 768px) {
+            .burger { display: block; }
+            
+            .site-header {
+                padding: 14px 16px 0;
+                height: 50px;
+                align-items: center;
+            }
+            .site-title { font-size: 15px; }
+            .site-subtitle { display: none; }
+
+            .layout { top: 50px; }
+
+            .nav-pane {
+                position: fixed;
+                top: 50px;
+                left: -100%;
+                width: 85%;
+                max-width: 320px;
+                height: calc(100vh - 50px);
+                background: var(--bg);
+                z-index: 150;
+                transition: left 0.25s ease;
+                border-right: 1px solid var(--border);
+            }
+            .nav-pane.open { left: 0; }
+
+            .nav-overlay {
+                display: none;
+                position: fixed;
+                top: 50px;
+                left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.1);
+                z-index: 140;
+            }
+            .nav-overlay.show { display: block; }
+
+            .content-pane {
+                padding: 20px 16px 40px;
+                width: 100%;
+            }
+
+            .daily-mobile {
+                display: block;
+                border-top: 1px solid var(--border);
+                padding: 20px 16px;
+                margin-top: 40px;
+            }
+            .daily-zone { display: none; }
+        }
+
+        @media (min-width: 769px) {
+            .daily-mobile { display: none; }
+            .nav-overlay { display: none !important; }
+        }
+
+        /* === ANIMATIONS === */
+        .entry-content > * {
+            animation: fadeUp 0.3s ease forwards;
+            opacity: 0;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .entry-content > *:nth-child(1) { animation-delay: 0.05s; }
+        .entry-content > *:nth-child(2) { animation-delay: 0.1s; }
+        .entry-content > *:nth-child(3) { animation-delay: 0.15s; }
+        .entry-content > *:nth-child(4) { animation-delay: 0.2s; }
+        .entry-content > *:nth-child(5) { animation-delay: 0.25s; }
+        .entry-content > *:nth-child(6) { animation-delay: 0.3s; }
+        .entry-content > *:nth-child(7) { animation-delay: 0.35s; }
+        .entry-content > *:nth-child(8) { animation-delay: 0.4s; }
+        .entry-content > *:nth-child(9) { animation-delay: 0.45s; }
+        .entry-content > *:nth-child(10) { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="site-header">
+        <div style="display:flex;align-items:center;gap:16px;">
+            <button class="burger" onclick="toggleNav()" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+            <a href="#" class="site-title" onclick="loadEntry('foundation'); return false;">f4u574.zip</a>
+        </div>
+        <div class="site-subtitle">
+            independent postdisciplinary<br>research project of<br>
+            <span class="author">fausta rheia mikutaitė</span>
+        </div>
+    </header>
+
+    <!-- NAV OVERLAY (mobile) -->
+    <div class="nav-overlay" onclick="toggleNav()"></div>
+
+    <!-- MAIN LAYOUT -->
+    <div class="layout">
+        
+        <!-- LEFT NAV -->
+        <aside class="nav-pane" id="navPane">
+            <div class="nav-entries">
+                
+                <!-- TEXT -->
+                <div class="nav-category" onclick="toggleCategory('text')">
+                    <span class="toggle-icon" id="icon-text">v</span> text
+                </div>
+                <ul class="nav-list" id="list-text">
+                    <li class="nav-item" onclick="loadEntry('jazz')">
+                        <span class="date">03 19</span>
+                        <span class="title">jazz compositions in text & other media</span>
+                    </li>
+                    <li class="nav-item" onclick="loadEntry('rhizome')">
+                        <span class="date">03 18</span>
+                        <span class="title">rhizome not a tree</span>
+                    </li>
+                    <li class="nav-item" onclick="loadEntry('mitochondria')">
+                        <span class="date">03 16</span>
+                        <span class="title">no rest for mitochondria</span>
+                    </li>
+                    <li class="nav-item active" onclick="loadEntry('foundation')">
+                        <span class="date">03 12</span>
+                        <span class="title">the foundation</span>
+                    </li>
+                </ul>
+
+                <!-- IMAGE -->
+                <div class="nav-category" onclick="toggleCategory('image')">
+                    <span class="toggle-icon" id="icon-image">></span> image
+                </div>
+                <ul class="nav-list collapsed" id="list-image">
+                    <li class="nav-item" onclick="loadEntry('fabric')">
+                        <span class="date">03 17</span>
+                        <span class="title">fabric study #1 — silk organza</span>
+                    </li>
+                </ul>
+
+                <!-- VIDEO -->
+                <div class="nav-category" onclick="toggleCategory('video')">
+                    <span class="toggle-icon" id="icon-video">></span> video
+                </div>
+                <ul class="nav-list collapsed" id="list-video">
+                    <li class="nav-item" onclick="loadEntry('walk')">
+                        <span class="date">03 15</span>
+                        <span class="title">walking through neringa</span>
+                    </li>
+                </ul>
+
+                <!-- SOUND -->
+                <div class="nav-category" onclick="toggleCategory('sound')">
+                    <span class="toggle-icon" id="icon-sound">></span> sound
+                </div>
+                <ul class="nav-list collapsed" id="list-sound">
+                    <li class="nav-item" onclick="loadEntry('sketch1')">
+                        <span class="date">03 14</span>
+                        <span class="title">untitled sound sketch #1</span>
+                    </li>
+                </ul>
+
+            </div>
+
+            <!-- DAILY COMPOSITION (desktop) -->
+            <div class="daily-zone">
+                <div class="daily-label">stream · 03 19</div>
+                <div class="daily-composition">
+                    <div class="frag frag-keyword" style="top:0; left:0;">metanoia</div>
+                    
+                    <div class="frag" style="top:30px; left:0;">
+                        <div style="width:100px;height:70px;background:#111;"></div>
+                        <div class="mini-player" style="margin-top:6px;">
+                            <button class="play-btn" onclick="toggleDailyAudio(this)">&#9654;</button>
+                            <div class="track-info">2022 kovo 5</div>
+                        </div>
+                    </div>
+                    
+                    <div class="frag frag-coord" style="top:80px; left:120px;">53.3498 N 6.2603 W</div>
+                    
+                    <div class="frag" style="top:115px; left:0; font-size:9px; color:var(--accent);">bertolucci's<br>dreamers</div>
+                    
+                    <div class="frag" style="top:140px; left:0;">
+                        <div style="width:90px;height:55px;background:var(--grey-light);"></div>
+                    </div>
+                    
+                    <div class="frag frag-text" style="top:135px; left:110px; max-width:130px; font-size:10px;">
+                        miegančių<br>drugelių<br>tvirtovė
+                    </div>
+                    
+                    <div class="frag" style="top:170px; left:100px; font-size:10px; color:var(--accent);">F#A#infinity</div>
+                    
+                    <div class="frag frag-text" style="top:200px; left:0; font-size:9px; max-width:120px; color:var(--accent);">
+                        viskas (nuo patirčių<br>iki minčių, o man tai<br>viena) stimuliuoja<br>labiau nei manau
+                    </div>
+                    
+                    <div class="frag frag-quote" style="top:195px; left:90px; font-family: 'Georgia', serif;">
+                        <span style="font-size:22px; font-style:italic;">"Né<br>Vélnio<br>Nebijau"</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CONTENT PANE -->
+        <main class="content-pane" id="contentPane">
+            <!-- default entry: the foundation -->
+            <div id="entry-foundation" class="entry">
+                <div class="entry-header">
+                    <div>
+                        <div class="entry-title">the foundation</div>
+                        <div class="entry-meta">🌱 seed · text</div>
+                    </div>
+                    <div class="entry-date">03 12</div>
+                </div>
+                <div class="entry-content">
+                    <div class="bullet-item">
+                        Lina puikiai išžemėlapiavo savo ligos simptomus, ir beklausydama, kad ir kaip bandžiau negalėjau nerelatinti, nors puikiai suprantu, kad Liną jaučia visą tai dešimtis kartų stipriau, sunkiau nei aš. Bet čia tiesiog pamąstymui — mano nervų sistema yra ir visuomet buvo itin perjautri. Visą gyevnimą dealinu su didžiuliais energijos pliumpsniais, impulsyvumu, hyperfocusu / obsession, constant overthinkinimu scatterbrainedness ir vėliau viso to kaina protinių, fizinių, emocinių resursų rezervams. Dabar žiūrint atgal, ar net priešais, kasdienybė dažnai ir atrodo kaip nesibaigianti dvikova tarp didžiulio potencialo, ištreniruoto gebėjimo mobilizuotis ir executint ir vėliau — crashų, motyvacijos problemų, nuolatinės pusiau miego / daydreaming būsenos. Atminties problemos, žodžių recollection, konceptualizavimo greitis/pajėgumai maximaliai svyruoja dienos, savaitės metu. Kiekviena kūnų išjausta mintis (o kitokių pas mane ir nelabai būna) kainuoja, kiekvienas interactionas su žmonėmis, socializacija, tiek sąmoninga, tiek labiau spontaniška, turi tiesiogiai atvirkščias bet tokias pačias kainas. Tai yra viena iš priežasčių, dabar suprantu, kodėl esu tokia labiau solitary, nei social, man sunku keep upinti daug kur, ir at the same time, daug kur outperforminu kitus. You can take almost any aspect of life, ar tai būtų žygis, ar prezentacija darbe, ar vakarėlis. Viskas (nuo patirčių iki minčių, o man tai viena) stimuliuoja labiau nei manau įprastai daugumą žmonių, tačiau pavargstu greičiau, bet kartu, kai esu itin excited ir tiesiog jaučiu nepasotinamumą, lipu per savo, vis dar matyt sunkiai, suvokiamas ribas ir stimuliuojuosi toliau.
+                    </div>
+
+                    <div class="bullet-item">
+                        Labai daug, ypač paskutiniais metais gimnazijos, sirgau. Ir tos ligos ar liga buvo irgi nepaaiškinama, nuolat 37temp, jokių kitų simptomų tik nuovargis, įvairiausī mild simptomai, prasitasiau pro n daktarų, tai dažnas pasiūlymas būdavo, kad reikia atostogų.
+                    </div>
+                    
+                    <div class="bullet-item">
+                        Žaviuosi kaip tave paskatino šis pokytis taip detaliai išanalizuoti pačią save ir kartu privertė gériau pažinti to viso biologinio kompiuterio mechanizmą, kuris mes esame. Turėjai labai aiškius atspirties taškus, state a pakeitė state b. aš net nežinau ar kada buvau pure a state, visuomet labiau fluid, mixas grynai vienas a su dviem b. aš dar turiu, labiau turėjau anksčiau, įvairių self destructive tendencies, tai man įvykdavo sprogimai, tuomet crachai, tuomet atsistatinėjimas, peakas, kuriame sprogstu ir vėl crashas. Ir destructive tendency, tai ar tai būtų vakarėlis, ar deadline'as, ar persistengimas, got too excited/aroused. Ir kaip tik galvojau apie tai prieš porą dienų, ar galėčiau kitaip? Ar galečiau išmainyti savo high highs for stability? Aš vis dar nežinau.
+                    </div>
+
+                    <hr>
+
+                    <div class="bullet-item">
+                        Nežinau ką noriu visu tuo pasakyti, nieko konkretaus, gal tiesiog matyt visą tai ką girdžiu veda man į vieną ir tą patį mano tyrimų, mąstymo buvimo topicą ar labiau perspective apie disciplinas ir kaip mūsų pasaulio knowledge ir science yra dalomas į stalčiukus, labels, diagnozes, kategorijas, vertikales ir horizontales apie kažką kas ne(turėtų būti)daloma. Visą laiką klausydama tavęs žaviuosi tavo žvitriu, aštriu protų ir tiesiog nenstoju tyliai kikenti iš tavo self commentary apie chaosą, minčių pametinėjimą ir panašiai, nes absoliučiai taip nėra ir neatrodo, ir tik galiu įsivaizduoti kokia ten quantum pirtis tavo galvelė iš tiesų yra. Ir aš niekaip neturinti jokios kompetencijos, iš tokio basic turimų at my disposal elementų tiesiog galvoju apie uždegimą. Šiaip astonishing jog stresas tiesiogiai susijęs su pleiskanų atsiradimu.
+                    </div>
+
+                    <div class="entry-connections">
+                        connected to: <a href="#" onclick="loadEntry('rhizome'); return false;">rhizome not a tree</a> · <a href="#" onclick="loadEntry('mitochondria'); return false;">no rest for mitochondria</a>
+                    </div>
+
+                    <div class="entry-nav">
+                        <span style="color:var(--light);">← no earlier entries</span>
+                        <a href="#" onclick="loadEntry('mitochondria'); return false;">next →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="entry-rhizome" class="entry" style="display:none;">
+                <div class="entry-header">
+                    <div>
+                        <div class="entry-title">rhizome not a tree</div>
+                        <div class="entry-meta">🌿 growing · text</div>
+                    </div>
+                    <div class="entry-date">03 18</div>
+                </div>
+                <div class="entry-content">
+                    <p>Deleuze and Guattari described a model of knowledge that has no hierarchy, no center, no beginning or end. Any point can connect to any other point. It grows horizontally like root systems, not vertically like trees.</p>
+                    
+                    <p>I've been frustrated my entire life by the fact that the world only gives me trees when what I need is a rhizome. Every filing system, every app, every institution — they all want me to put things in branches. But my mind doesn't branch. It sprawls. It connects sideways. A fabric swatch connects to a philosophical insight connects to a melody connects to a memory of walking through Neringa in November.</p>
+                    
+                    <p>The system I'm building<span class="footnote">1</span> refuses the tree. One database. No folders. No nesting. Just entries with facets — and every entry can be a visitor in multiple rooms simultaneously.</p>
+
+                    <blockquote>the weight of the knowledge does not weigh me down. and that's why I need systems I could easily float in this space.</blockquote>
+
+                    <p>Tags: <span class="tag">systems</span> · <span class="tag">deleuze</span> · <span class="tag">methodology</span> · <span class="tag">looney elysium</span></p>
+
+                    <div class="footnotes-section">
+                        <sup>1</sup> See: <a href="#" onclick="loadEntry('foundation'); return false;">the foundation</a>
+                    </div>
+
+                    <div class="entry-connections">
+                        connected to: <a href="#" onclick="loadEntry('foundation'); return false;">the foundation</a> · <a href="#" onclick="loadEntry('jazz'); return false;">jazz compositions in text & other media</a>
+                    </div>
+
+                    <div class="entry-nav">
+                        <a href="#" onclick="loadEntry('mitochondria'); return false;">← prev</a>
+                        <a href="#" onclick="loadEntry('jazz'); return false;">next →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="entry-jazz" class="entry" style="display:none;">
+                <div class="entry-header">
+                    <div>
+                        <div class="entry-title">jazz compositions in text & other media</div>
+                        <div class="entry-meta">🌱 seed · text, image, sound</div>
+                    </div>
+                    <div class="entry-date">03 19</div>
+                </div>
+                <div class="entry-content">
+                    <p>What if writing is not writing but composing? Not in the musical sense exclusively but in the sense that John Cage meant — organizing sounds, and silences, and the accidents in between.</p>
+                    
+                    <p>I compose in text the way a jazz musician composes: with a structure loose enough to allow improvisation, with repetition that isn't repetition because the context has shifted, with space for the unexpected to enter and rearrange everything.</p>
+
+                    <div class="color-block" style="background: var(--pink);"></div>
+
+                    <p>This entry itself is a composition. Text and image and (soon) sound, not illustrating each other but coexisting. The pink block above is not decoration. It's a pause. A breath between paragraphs. A color that exists because I felt it belonged here today.</p>
+
+                    <div class="audio-player">
+                        <div class="audio-label">sketch_030219.mp3 — field recording, vilnius</div>
+                        <audio controls preload="none">
+                            <source src="about:blank" type="audio/mpeg">
+                        </audio>
+                    </div>
+
+                    <p>The sound player above is empty for now. When I have a recording, it goes here. The infrastructure waits for the content. The room exists before the furniture arrives.</p>
+
+                    <div class="entry-connections">
+                        connected to: <a href="#" onclick="loadEntry('rhizome'); return false;">rhizome not a tree</a>
+                    </div>
+
+                    <div class="entry-nav">
+                        <a href="#" onclick="loadEntry('rhizome'); return false;">← prev</a>
+                        <span style="color:var(--light);">no newer entries →</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="entry-mitochondria" class="entry" style="display:none;">
+                <div class="entry-header">
+                    <div>
+                        <div class="entry-title">no rest for mitochondria</div>
+                        <div class="entry-meta">🌿 growing · text</div>
+                    </div>
+                    <div class="entry-date">03 16</div>
+                </div>
+                <div class="entry-content">
+                    <p>The body is the first laboratory. Before any system, before any notation, before any digital garden — there is the nervous system, doing its own composing. Every perception costs energy. Every interaction is a transaction in biological currency.</p>
+                    
+                    <p>I've been tracking: the crashes follow the peaks with mechanical regularity. Not because I'm broken but because the instrument is sensitive. A Stradivarius doesn't survive a mosh pit. But it plays sounds no factory violin can dream of.</p>
+
+                    <p>The question isn't whether to dampen the sensitivity. The question is: can I build scaffolding around it? Not to contain it but to catch what it produces before it dissipates.</p>
+
+                    <p>That's what the system is. Not life management. Energy management. Catching what the mitochondria produce before the crash erases the memory of having produced it.</p>
+
+                    <div class="entry-connections">
+                        connected to: <a href="#" onclick="loadEntry('foundation'); return false;">the foundation</a>
+                    </div>
+
+                    <div class="entry-nav">
+                        <a href="#" onclick="loadEntry('foundation'); return false;">← prev</a>
+                        <a href="#" onclick="loadEntry('rhizome'); return false;">next →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="entry-sketch1" class="entry" style="display:none;">
+                <div class="entry-header">
+                    <div>
+                        <div class="entry-title">untitled sound sketch #1</div>
+                        <div class="entry-meta">🌱 seed · sound</div>
+                    </div>
+                    <div class="entry-date">03 14</div>
+                </div>
+                <div class="entry-content">
+                    <div class="audio-player">
+                        <div class="audio-label">sketch_001.mp3</div>
+                        <audio controls preload="none">
+                            <source src="about:blank" type="audio/mpeg">
+                        </audio>
+                    </div>
+                    <p>No words needed. Just listen.</p>
+
+                    <div class="entry-nav">
+                        <a href="#" onclick="loadEntry('foundation'); return false;">← prev</a>
+                        <a href="#" onclick="loadEntry('mitochondria'); return false;">next →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="entry-fabric" class="entry" style="display:none;">
+                <div class="entry-header">
+                    <div>
+                        <div class="entry-title">fabric study #1 — silk organza</div>
+                        <div class="entry-meta">🌱 seed · image</div>
+                    </div>
+                    <div class="entry-date">03 17</div>
+                </div>
+                <div class="entry-content">
+                    <div class="color-block" style="background: var(--pink); height: 400px; opacity: 0.6;"></div>
+                    <p>Translucent. Holds structure without weight. Takes dye unevenly — which is the point. The imperfection is the information.</p>
+                    <div class="color-block" style="background: var(--grey-light); height: 250px;"></div>
+
+                    <div class="entry-nav">
+                        <a href="#" onclick="loadEntry('mitochondria'); return false;">← prev</a>
+                        <a href="#" onclick="loadEntry('rhizome'); return false;">next →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="entry-walk" class="entry" style="display:none;">
+                <div class="entry-header">
+                    <div>
+                        <div class="entry-title">walking through neringa</div>
+                        <div class="entry-meta">🌱 seed · video</div>
+                    </div>
+                    <div class="entry-date">03 15</div>
+                </div>
+                <div class="entry-content">
+                    <div class="color-block" style="background: #2a3a2a; height: 380px;"></div>
+                    <p>Video would embed here. The dunes in March. Wind so strong the camera shakes. That's not a flaw — it's weather becoming part of the composition.</p>
+
+                    <div class="entry-nav">
+                        <a href="#" onclick="loadEntry('foundation'); return false;">← prev</a>
+                        <a href="#" onclick="loadEntry('mitochondria'); return false;">next →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAILY COMPOSITION (mobile only) -->
+            <div class="daily-mobile">
+                <div class="daily-label">stream · 03 19</div>
+                <div style="font-size:13px; margin-bottom:8px;">metanoia</div>
+                <div style="display:flex; gap:12px; margin-bottom:10px;">
+                    <div style="width:80px;height:56px;background:#111;flex-shrink:0;"></div>
+                    <div>
+                        <div class="mini-player">
+                            <button class="play-btn" onclick="toggleDailyAudio(this)">&#9654;</button>
+                            <div class="track-info">2022 kovo 5</div>
+                        </div>
+                        <div style="font-size:10px;color:var(--accent);margin-top:4px;">53.3498 N 6.2603 W</div>
+                    </div>
+                </div>
+                <div style="font-size:9px;color:var(--accent);">bertolucci's dreamers</div>
+                <div style="font-size:10px;margin-top:6px;">miegančių drugelių tvirtovė</div>
+                <div style="font-size:10px;color:var(--accent);margin-top:4px;">F#A#infinity</div>
+                <div style="font-size:9px;color:var(--accent);margin-top:8px;max-width:200px;">
+                    viskas (nuo patirčių iki minčių, o man tai viena) stimuliuoja labiau nei manau
+                </div>
+                <div style="font-family:Georgia,serif;font-style:italic;font-size:18px;margin-top:8px;">
+                    "Né Vélnio Nebijau"
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // === NAVIGATION ===
+        function toggleCategory(cat) {
+            const list = document.getElementById('list-' + cat);
+            const icon = document.getElementById('icon-' + cat);
+            list.classList.toggle('collapsed');
+            icon.textContent = list.classList.contains('collapsed') ? '>' : 'v';
+        }
+
+        function loadEntry(id) {
+            // hide all entries
+            document.querySelectorAll('.entry').forEach(e => e.style.display = 'none');
+            // show target
+            const target = document.getElementById('entry-' + id);
+            if (target) {
+                target.style.display = 'block';
+                // re-trigger animations
+                const content = target.querySelector('.entry-content');
+                if (content) {
+                    content.querySelectorAll(':scope > *').forEach(el => {
+                        el.style.animation = 'none';
+                        el.offsetHeight; // force reflow
+                        el.style.animation = '';
+                    });
+                }
+            }
+            // update active state in nav
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            // scroll content to top
+            document.getElementById('contentPane').scrollTo(0, 0);
+            // close mobile nav
+            if (window.innerWidth <= 768) {
+                document.getElementById('navPane').classList.remove('open');
+                document.querySelector('.nav-overlay').classList.remove('show');
+                document.querySelector('.burger').classList.remove('open');
+            }
+        }
+
+        // === BURGER MENU ===
+        function toggleNav() {
+            document.getElementById('navPane').classList.toggle('open');
+            document.querySelector('.nav-overlay').classList.toggle('show');
+            document.querySelector('.burger').classList.toggle('open');
+        }
+
+        // === DAILY AUDIO ===
+        function toggleDailyAudio(btn) {
+            btn.innerHTML = btn.innerHTML === '&#9654;' ? '&#9646;&#9646;' : '&#9654;';
+        }
+    </script>
+</body>
+</html>
