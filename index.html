@@ -1,4 +1,4 @@
-<!-- f4u574.zip — v2.2 exact mockup match -->
+<!-- f4u574.zip — v3.0 restructured -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,212 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #fff; --fg: #1a1a1a; --accent: #777; --light: #aaa;
-            --border: #bbb; --hover: #000;
-            --sans: 'Geist', sans-serif; --mono: 'Geist Mono', monospace;
-        }
-        .dark {
-            --bg: #0a0a0a; --fg: #d4d4d4; --accent: #666; --light: #444;
-            --border: #2a2a2a; --hover: #fff;
-        }
-        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            font-family: var(--sans); background: var(--bg); color: var(--fg);
-            font-size: 13px; line-height: 1.7; -webkit-font-smoothing: antialiased;
-            overflow: hidden; height: 100vh; transition: background 0.3s, color 0.3s;
-        }
-        ::selection { background: var(--fg); color: var(--bg); }
-        a { color: var(--fg); text-decoration: none; }
-        a:hover { color: var(--hover); }
-
-        /* hide all scrollbars */
-        ::-webkit-scrollbar { display: none; }
-        * { scrollbar-width: none; }
-
-        /* === HEADER === */
-        .site-header {
-            position: fixed; top: 0; left: 0; right: 0;
-            height: 32px;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 16px;
-            font-family: var(--mono); font-size: 12px;
-            background: var(--bg); z-index: 100;
-            border-bottom: 1px solid var(--border);
-            transition: background 0.3s;
-        }
-        .h-left { display: flex; align-items: center; gap: 10px; }
-        .h-center {
-            position: absolute; left: 50%; transform: translateX(-50%);
-            color: var(--accent); white-space: nowrap; font-size: 12px;
-        }
-        .h-center .author { color: var(--fg); }
-        .h-right { display: flex; gap: 10px; color: var(--accent); }
-        .h-right a { color: var(--accent); }
-        .h-right a:hover { color: var(--fg); }
-        .h-btn {
-            background: none; border: none; cursor: pointer;
-            font-family: var(--mono); font-size: 12px; color: var(--fg);
-            padding: 0; transition: color 0.15s;
-        }
-        .h-btn:hover { color: var(--accent); }
-
-        /* === LAYOUT === */
-        .layout {
-            display: flex; position: fixed;
-            top: 32px; left: 0; right: 0; bottom: 0;
-        }
-
-        /* === NAV === */
-        .nav-pane {
-            width: 24%; min-width: 220px; max-width: 320px;
-            border-right: 1px solid var(--border);
-            overflow-y: auto; padding: 12px 16px;
-            transition: width 0.3s, min-width 0.3s, padding 0.3s, opacity 0.2s;
-        }
-        .nav-pane.collapsed {
-            width: 0; min-width: 0; padding: 0; opacity: 0;
-            border-right: none; overflow: hidden;
-        }
-        .nav-cat {
-            margin-bottom: 3px; cursor: pointer; user-select: none;
-            font-size: 12px; font-family: var(--mono);
-        }
-        .nav-cat:hover { color: var(--hover); }
-        .nav-cat .ti { display: inline-block; width: 14px; color: var(--accent); font-size: 11px; }
-        .nav-list { list-style: none; margin: 0 0 8px; overflow: hidden; transition: max-height 0.3s; }
-        .nav-list.collapsed { max-height: 0; margin-bottom: 3px; }
-        .nav-item {
-            display: flex; gap: 8px; padding: 1px 0 1px 14px;
-            font-size: 11px; cursor: pointer; line-height: 1.5;
-        }
-        .nav-item:hover { color: var(--hover); }
-        .nav-item.active { font-weight: 600; }
-        .nav-item .d { color: var(--light); white-space: nowrap; font-family: var(--mono); font-size: 10px; }
-
-        /* === STREAM === */
-        .stream-pane { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-        .stream-bar {
-            height: 32px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; border-bottom: 1px solid var(--border); flex-shrink: 0;
-            font-family: var(--mono); font-size: 12px;
-        }
-        .stream-bar-label { cursor: pointer; }
-        .stream-bar-label:hover { color: var(--hover); }
-        .stream-bar-btn {
-            background: none; border: none; cursor: pointer;
-            font-family: var(--mono); font-size: 14px; color: var(--fg); padding: 0;
-        }
-        .stream-bar-btn:hover { color: var(--accent); }
-        .stream-scroll { flex: 1; overflow-y: auto; }
-
-        /* filter dropdown */
-        .s-filter-wrap { position: relative; }
-        .s-filter-dd {
-            display: none; position: absolute; top: 100%; left: 0; right: 0;
-            background: var(--bg); border-bottom: 1px solid var(--border);
-            padding: 8px 20px; z-index: 50; font-family: var(--mono); font-size: 11px;
-        }
-        .s-filter-dd.open { display: flex; flex-wrap: wrap; gap: 4px 12px; }
-        .s-fo { cursor: pointer; color: var(--accent); padding: 2px 0; }
-        .s-fo:hover { color: var(--fg); }
-        .s-fo.active { color: var(--fg); font-weight: 600; }
-
-        /* entries */
-        .se {
-            padding: 24px 24px 28px; border-bottom: 1px solid var(--border);
-        }
-        .se-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
-        .se-title { font-size: 13px; font-weight: 400; }
-        .se-date { font-size: 10px; color: var(--accent); font-family: var(--mono); white-space: nowrap; }
-        .se-meta { font-size: 10px; color: var(--light); margin-top: 2px; font-family: var(--mono); }
-        .se-body { max-width: 640px; }
-        .se-body p { margin-bottom: 1.1rem; }
-        .se-body .bi { padding-left: 14px; margin-bottom: 1.1rem; position: relative; }
-        .se-body .bi::before { content: '•'; position: absolute; left: 0; }
-        .se-body blockquote { border-left: 1px solid var(--accent); padding-left: 14px; margin: 18px 0; color: var(--accent); font-style: italic; }
-        .se-body hr { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
-        .se-body .cb { width: 100%; height: 240px; display: block; margin: 18px 0; }
-        .al { font-size: 10px; color: var(--accent); font-family: var(--mono); margin-bottom: 4px; }
-        .se-body audio { width: 100%; height: 32px; margin: 8px 0 16px; }
-        .se-tags { margin-top: 18px; font-size: 11px; font-family: var(--mono); color: var(--accent); }
-        .se-tag { cursor: pointer; border-bottom: 1px dotted var(--border); transition: all 0.1s; }
-        .se-tag:hover { color: var(--fg); border-color: var(--fg); }
-        .se-refs { margin-top: 8px; font-size: 11px; font-family: var(--mono); color: var(--accent); }
-        .cl { cursor: pointer; border-bottom: 1px dotted var(--accent); }
-        .cl:hover { color: var(--fg); border-color: var(--fg); }
-
-        /* === COMPANION === */
-        .comp-pane { flex: 1; display: flex; flex-direction: column; border-left: 1px solid var(--border); overflow: hidden; transition: flex 0.3s, opacity 0.2s; }
-        .comp-pane.collapsed { flex: 0 0 0; min-width: 0; opacity: 0; border-left: none; overflow: hidden; }
-        .comp-bar {
-            height: 32px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 16px; border-bottom: 1px solid var(--border); flex-shrink: 0;
-            font-family: var(--mono); font-size: 12px;
-        }
-        .comp-bar-left { display: flex; align-items: center; gap: 6px; }
-        .comp-bar-right { display: flex; align-items: center; gap: 6px; }
-        .cb-btn {
-            background: none; border: none; cursor: pointer;
-            font-family: var(--mono); font-size: 12px; color: var(--accent); padding: 0;
-        }
-        .cb-btn:hover { color: var(--fg); }
-        .comp-scroll { flex: 1; overflow-y: auto; padding: 12px 16px; }
-
-        .cc { margin-bottom: 3px; cursor: pointer; user-select: none; font-size: 12px; font-family: var(--mono); }
-        .cc:hover { color: var(--hover); }
-        .cc .ti { display: inline-block; width: 14px; color: var(--accent); font-size: 11px; }
-        .ccl { list-style: none; margin: 0 0 8px; overflow: hidden; transition: max-height 0.3s; }
-        .ccl.collapsed { max-height: 0; margin-bottom: 3px; }
-        .cci { padding: 1px 0 1px 16px; font-size: 11px; cursor: pointer; color: var(--accent); }
-        .cci:hover { color: var(--fg); }
-
-        /* companion results */
-        .cr { padding: 6px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
-        .cr:hover { color: var(--hover); }
-        .cr-t { font-size: 11px; }
-        .cr-d { font-size: 10px; color: var(--accent); font-family: var(--mono); }
-
-        /* daily */
-        .dl { font-size: 9px; letter-spacing: 0.1em; color: var(--light); text-transform: uppercase; margin-bottom: 8px; font-family: var(--mono); }
-        .df { margin-bottom: 5px; font-size: 11px; }
-        .dk { font-size: 12px; font-weight: 500; }
-        .dc { font-size: 10px; color: var(--accent); font-family: var(--mono); }
-        .dr { font-size: 10px; color: var(--accent); }
-        .dq { font-style: italic; font-size: 14px; line-height: 1.3; font-family: Georgia, serif; }
-
-        /* === WHEN NAV COLLAPSED: book icon stays in header === */
-        /* The book icon in header always visible, toggles nav */
-
-        /* === BURGER (mobile) === */
-        .burger { display: none; background: none; border: none; cursor: pointer; padding: 2px; }
-        .burger span { display: block; width: 16px; height: 1px; background: var(--fg); margin: 3px 0; }
-
-        @media (max-width: 900px) {
-            .burger { display: block; }
-            .h-center { display: none; }
-            .comp-pane { display: none; }
-            .nav-pane {
-                position: fixed; top: 32px; left: -100%;
-                width: 85%; max-width: 280px; height: calc(100vh - 32px);
-                background: var(--bg); z-index: 150;
-                transition: left 0.25s; border-right: 1px solid var(--border);
-            }
-            .nav-pane.mobile-open { left: 0; }
-            .nav-pane.collapsed { left: -100%; }
-            .se { padding: 16px 14px 20px; }
-        }
-
-        .se-body > * { animation: fu 0.2s ease forwards; opacity: 0; }
-        @keyframes fu { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:translateY(0); } }
-        .se-body > *:nth-child(1) { animation-delay: 0.02s; }
-        .se-body > *:nth-child(2) { animation-delay: 0.04s; }
-        .se-body > *:nth-child(3) { animation-delay: 0.06s; }
-        .se-body > *:nth-child(4) { animation-delay: 0.08s; }
-        .se-body > *:nth-child(5) { animation-delay: 0.1s; }
-        .se-body > *:nth-child(6) { animation-delay: 0.12s; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -222,13 +17,13 @@
         <div class="h-left">
             <button class="burger" onclick="document.getElementById('navPane').classList.toggle('mobile-open')"><span></span><span></span><span></span></button>
             <span>f4u574.zip</span>
-            <button class="h-btn" onclick="togglePane('nav')" title="Toggle navigation">◫</button>
+            <button class="h-btn" onclick="togglePane('nav')" title="Toggle navigation">&#x25EB;</button>
         </div>
         <div class="h-center">
-            independent postdisciplinary research project of&nbsp;&nbsp;<span class="author">fausta rheia mikutaitė</span>
+            independent postdisciplinary research project of&nbsp;&nbsp;<span class="author">fausta rheia mikutait&#x0117;</span>
         </div>
         <div class="h-right">
-            <a href="/cdn-cgi/l/email-protection#2741135212101367404a464e4b0944484a"><span class="__cf_email__" data-cfemail="1c7a2869292b285c7b717d7570327f7371">[email&#160;protected]</span></a>
+            <a href="mailto:hello@f4u574.zip">hello@f4u574.zip</a>
             <a href="#">ig</a>
             <a href="#">substack</a>
             <a href="#">github</a>
@@ -238,27 +33,16 @@
     <!-- LAYOUT -->
     <div class="layout">
 
-        <!-- NAV (no sub-header, content starts immediately) -->
+        <!-- NAV -->
         <aside class="nav-pane" id="navPane">
             <div class="nav-cat" onclick="tCat('text')"><span class="ti" id="i-text">v</span> text</div>
-            <ul class="nav-list" id="l-text">
-                <li class="nav-item" data-e="jazz" onclick="sTo('jazz')"><span class="d">03 19</span><span>jazz compositions in text & other media</span></li>
-                <li class="nav-item" data-e="rhizome" onclick="sTo('rhizome')"><span class="d">03 18</span><span>rhizome not a tree</span></li>
-                <li class="nav-item" data-e="mitochondria" onclick="sTo('mitochondria')"><span class="d">03 16</span><span>no rest for mitochondria</span></li>
-                <li class="nav-item" data-e="foundation" onclick="sTo('foundation')"><span class="d">03 12</span><span>the foundation</span></li>
-            </ul>
+            <ul class="nav-list" id="l-text"></ul>
             <div class="nav-cat" onclick="tCat('image')"><span class="ti" id="i-image">></span> image</div>
-            <ul class="nav-list collapsed" id="l-image">
-                <li class="nav-item" data-e="fabric" onclick="sTo('fabric')"><span class="d">03 17</span><span>fabric study #1 — silk organza</span></li>
-            </ul>
+            <ul class="nav-list collapsed" id="l-image"></ul>
             <div class="nav-cat" onclick="tCat('video')"><span class="ti" id="i-video">></span> video</div>
-            <ul class="nav-list collapsed" id="l-video">
-                <li class="nav-item" data-e="walk" onclick="sTo('walk')"><span class="d">03 15</span><span>walking through neringa</span></li>
-            </ul>
+            <ul class="nav-list collapsed" id="l-video"></ul>
             <div class="nav-cat" onclick="tCat('sound')"><span class="ti" id="i-sound">></span> sound</div>
-            <ul class="nav-list collapsed" id="l-sound">
-                <li class="nav-item" data-e="sketch1" onclick="sTo('sketch1')"><span class="d">03 14</span><span>untitled sound sketch #1</span></li>
-            </ul>
+            <ul class="nav-list collapsed" id="l-sound"></ul>
         </aside>
 
         <!-- STREAM -->
@@ -266,7 +50,7 @@
             <div class="s-filter-wrap">
                 <div class="stream-bar">
                     <span class="stream-bar-label" onclick="tFM()" id="sfLabel">All</span>
-                    <button class="stream-bar-btn" onclick="tFM()">≡</button>
+                    <button class="stream-bar-btn" onclick="tFM()">&#x2261;</button>
                 </div>
                 <div class="s-filter-dd" id="fDD">
                     <span class="s-fo active" onclick="sF('all')">all</span>
@@ -279,84 +63,19 @@
                     <span class="s-fo" onclick="sF('systems')">systems</span>
                 </div>
             </div>
-            <div class="stream-scroll" id="sScroll">
-
-                <div class="se" id="e-jazz" data-m="text image sound" data-t="research systems composition">
-                    <div class="se-head"><div><div class="se-title">jazz compositions in text & other media</div><div class="se-meta">🌱 seed · text, image, sound</div></div><div class="se-date">03 19</div></div>
-                    <div class="se-body">
-                        <p>What if writing is not writing but composing? Not in the musical sense exclusively but in the sense that John Cage meant — organizing sounds, and silences, and the accidents in between.</p>
-                        <p>I compose in text the way a jazz musician composes: with a structure loose enough to allow improvisation, with repetition that isn't repetition because the context has shifted, with space for the unexpected to enter and rearrange everything.</p>
-                        <div class="cb" style="background:#d4a5b5;"></div>
-                        <p>This entry itself is a composition. Text and image and (soon) sound, not illustrating each other but coexisting.</p>
-                        <div><div class="al">sketch_030219.mp3 — field recording, vilnius</div><audio controls preload="none"><source src="about:blank" type="audio/mpeg"></audio></div>
-                    </div>
-                    <div class="se-tags">text · research · <span class="se-tag" onclick="fC('systems')">systems</span> · <span class="se-tag" onclick="fC('composition')">composition</span></div>
-                    <div class="se-refs">[1] <span class="cl" onclick="oC('rhizome')">rhizome not a tree</span></div>
-                </div>
-
-                <div class="se" id="e-rhizome" data-m="text" data-t="research systems deleuze methodology">
-                    <div class="se-head"><div><div class="se-title">rhizome not a tree</div><div class="se-meta">🌿 growing · text</div></div><div class="se-date">03 18</div></div>
-                    <div class="se-body">
-                        <p>Deleuze and Guattari described a model of knowledge that has no hierarchy, no center, no beginning or end. Any point can connect to any other point.</p>
-                        <p>I've been frustrated my entire life by the fact that the world only gives me trees when what I need is a rhizome. Every filing system, every app, every institution — they all want me to put things in branches.</p>
-                        <p>The system I'm building refuses the tree. One database. No folders. No nesting. Just entries with facets — and every entry can be a visitor in multiple rooms simultaneously.</p>
-                        <blockquote>the weight of the knowledge does not weigh me down. and that's why I need systems I could easily float in this space.</blockquote>
-                    </div>
-                    <div class="se-tags">text · <span class="se-tag" onclick="fC('research')">research</span> · <span class="se-tag" onclick="fC('systems')">systems</span> · deleuze</div>
-                    <div class="se-refs">[1] <span class="cl" onclick="oC('foundation')">the foundation</span></div>
-                </div>
-
-                <div class="se" id="e-fabric" data-m="image" data-t="material fashion">
-                    <div class="se-head"><div><div class="se-title">fabric study #1 — silk organza</div><div class="se-meta">🌱 seed · image</div></div><div class="se-date">03 17</div></div>
-                    <div class="se-body">
-                        <div class="cb" style="background:#d4a5b5;height:320px;opacity:0.6;"></div>
-                        <p>Translucent. Holds structure without weight. Takes dye unevenly — which is the point.</p>
-                        <div class="cb" style="background:#d9d9d9;height:180px;"></div>
-                    </div>
-                    <div class="se-tags">image · material · fashion</div>
-                </div>
-
-                <div class="se" id="e-mitochondria" data-m="text" data-t="research body consciousness">
-                    <div class="se-head"><div><div class="se-title">no rest for mitochondria</div><div class="se-meta">🌿 growing · text</div></div><div class="se-date">03 16</div></div>
-                    <div class="se-body">
-                        <div class="bi">Lina puikiai išžemėlapiavo savo ligos simptomus, ir beklausydama, kad ir kaip bandžiau negalėjau nerelatinti, nors puikiai suprantu, kad Liną jaučia visą tai dešimtis kartų stipriau, sunkiau nei aš. Bet čia tiesiog pamąstymui— mano nervų sistema yra ir visuomet buvo itin perjautri. Visą gyevnimą dealinu su didžiuliais energijos pliumpsniais, impulsyvumu, hyperfocusu / obsession, constant overthinkinimu scatterbrainedness ir vėliau viso to kaina protinių, fizinių, emocinių resursų rezervams. Dabar žiūrint atgal, ar net priešais, kasdienybė dažnai ir atrodo kaip nesibaigianti dvikova tarp didžiulio potencialo, ištreniruoto gebėjimo mobilizuotis ir executint ir vėliau - crashų, motyvacijos problemų, nuolatinės pusiau miego / daydreaming būsenos. Atminties problemos, žodžių recollection, konceptualizavimo greitis/pajėgumai maximaliai svyruoja dienos, savaitės metu. Kiekviena kūnų išjausta mintis (o kitokių pas mane ir nelabai būna) kainuoja, kiekvienas interactionas su žmonėmis, socializacija, tiek sąmoninga, tiek labiau spontaniška, turi tiesiogiai atvirkščias bet tokias pačias kainas. Tai yra viena iš priežasčių, dabar suprantu, kodėl esu tokia labiau solitary, nei social, man sunku keep upinti daug kur, ir at the same time, daug kur outperforminu kitus. You can take almost any aspect of life, ar tai būtų žygis, ar prezentacija darbe, ar vakarėlis. Viskas (nuo patirčių iki minčių, o man tai viena) stimuliuoja labiau nei manau įprastai daugumą žmonių, tačiau pavargstu greičiau, bet kartu, kai esu itin excited ir tiesiog jaučiu nepasotinamumą, lipu per savo, vis dar matyt sunkiai, suvokiamas ribas ir stimuliuojuosi toliau.</div>
-                    </div>
-                    <div class="se-refs">[1] Reference one<br>[2] Reference two<br>[3] Reference three</div>
-                    <div class="se-tags" style="margin-top:14px;">text<br>research<br>tag 1<br>tag 2</div>
-                </div>
-
-                <div class="se" id="e-walk" data-m="video" data-t="landscape neringa">
-                    <div class="se-head"><div><div class="se-title">walking through neringa</div><div class="se-meta">🌱 seed · video</div></div><div class="se-date">03 15</div></div>
-                    <div class="se-body"><div class="cb" style="background:#2a3a2a;height:300px;"></div><p>The dunes in March.</p></div>
-                    <div class="se-tags">video · landscape · neringa</div>
-                </div>
-
-                <div class="se" id="e-sketch1" data-m="sound" data-t="music sketch">
-                    <div class="se-head"><div><div class="se-title">untitled sound sketch #1</div><div class="se-meta">🌱 seed · sound</div></div><div class="se-date">03 14</div></div>
-                    <div class="se-body"><div class="al">sketch_001.mp3</div><audio controls preload="none"><source src="about:blank" type="audio/mpeg"></audio><p>No words needed.</p></div>
-                    <div class="se-tags">sound · music</div>
-                </div>
-
-                <div class="se" id="e-foundation" data-m="text" data-t="research diary consciousness">
-                    <div class="se-head"><div><div class="se-title">the foundation</div><div class="se-meta">🌱 seed · text</div></div><div class="se-date">03 12</div></div>
-                    <div class="se-body">
-                        <div class="bi">Nežinau ką noriu visu tuo pasakyti, nieko konkretaus, gal tiesiog matyt visą tai ką girdžiu veda man į vieną ir tą patį mano tyrimų, mąstymo buvimo topicą ar labiau perspective apie disciplinas ir kaip mūsų pasaulio knowledge ir science yra dalomas į stalčiukus, labels, diagnozes, kategorijas.</div>
-                    </div>
-                    <div class="se-tags">text · research · diary · consciousness</div>
-                </div>
-            </div>
+            <div class="stream-scroll" id="sScroll"></div>
         </div>
 
         <!-- COMPANION -->
         <aside class="comp-pane" id="compPane">
             <div class="comp-bar">
                 <div class="comp-bar-left">
-                    <button class="cb-btn" id="cBack" onclick="rC()" style="display:none;">←</button>
+                    <button class="cb-btn" id="cBack" onclick="rC()" style="display:none;">&#x2190;</button>
                     <span id="cTitle">Index</span>
                 </div>
                 <div class="comp-bar-right">
                     <span class="cb-btn" onclick="togglePane('comp')" style="font-size:11px;">(Close)</span>
-                    <button class="cb-btn" onclick="togglePane('comp')" title="Toggle companion" style="font-size:13px;">◫</button>
+                    <button class="cb-btn" onclick="togglePane('comp')" title="Toggle companion" style="font-size:13px;">&#x25EB;</button>
                 </div>
             </div>
             <div class="comp-scroll" id="cContent">
@@ -381,66 +100,6 @@
         </aside>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        function togglePane(p) {
-            if (p === 'nav') {
-                document.getElementById('navPane').classList.toggle('collapsed');
-            } else {
-                document.getElementById('compPane').classList.toggle('collapsed');
-            }
-        }
-        function tCat(c) {
-            const l = document.getElementById('l-'+c), i = document.getElementById('i-'+c);
-            l.classList.toggle('collapsed');
-            i.textContent = l.classList.contains('collapsed') ? '>' : 'v';
-        }
-        function sTo(id) {
-            const e = document.getElementById('e-'+id);
-            if (e) { e.scrollIntoView({behavior:'smooth',block:'start'}); e.style.background = document.body.classList.contains('dark')?'rgba(255,255,255,0.02)':'rgba(0,0,0,0.012)'; setTimeout(()=>e.style.background='',2000); }
-            document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
-            const n = document.querySelector(`.nav-item[data-e="${id}"]`);
-            if (n) n.classList.add('active');
-            if (window.innerWidth<=900) document.getElementById('navPane').classList.remove('mobile-open');
-        }
-        function tFM() { document.getElementById('fDD').classList.toggle('open'); }
-        function sF(f) {
-            document.querySelectorAll('.se').forEach(e=>{
-                if (f==='all') e.style.display='';
-                else { const m=e.dataset.m||'',t=e.dataset.t||''; e.style.display=(m.includes(f)||t.includes(f))?'':'none'; }
-            });
-            document.getElementById('sfLabel').textContent = f==='all'?'All':f;
-            document.querySelectorAll('.s-fo').forEach(o=>o.classList.remove('active'));
-            if(event&&event.target) event.target.classList.add('active');
-            document.getElementById('fDD').classList.remove('open');
-        }
-        // Companion
-        function oC(id) {
-            const e = document.getElementById('e-'+id);
-            if (!e) return;
-            const t=e.querySelector('.se-title').textContent, d=e.querySelector('.se-date').textContent, c=e.querySelector('.se-body').innerHTML;
-            document.getElementById('cTitle').textContent=t;
-            document.getElementById('cBack').style.display='inline';
-            document.getElementById('cContent').innerHTML=`<div style="padding:4px 0;"><div style="font-size:10px;color:var(--accent);font-family:var(--mono);margin-bottom:8px;">${d}</div><div style="font-size:12px;line-height:1.6;">${c}</div></div>`;
-            document.getElementById('compPane').classList.remove('collapsed');
-        }
-        function fC(tag) {
-            let r='';
-            document.querySelectorAll('.se').forEach(e=>{
-                const m=e.dataset.m||'',t=e.dataset.t||'';
-                if (m.includes(tag)||t.includes(tag)) {
-                    const ti=e.querySelector('.se-title').textContent, d=e.querySelector('.se-date').textContent, id=e.id.replace('e-','');
-                    r+=`<div class="cr" onclick="sTo('${id}')"><div class="cr-t">${ti}</div><div class="cr-d">${d}</div></div>`;
-                }
-            });
-            document.getElementById('cTitle').textContent=tag;
-            document.getElementById('cBack').style.display='inline';
-            document.getElementById('cContent').innerHTML=r||'<div style="color:var(--accent);font-size:11px;">no entries</div>';
-            document.getElementById('compPane').classList.remove('collapsed');
-        }
-        function rC() {
-            document.getElementById('cTitle').textContent='Index';
-            document.getElementById('cBack').style.display='none';
-            document.getElementById('cContent').innerHTML=window._cd;
-        }
-        window.addEventListener('DOMContentLoaded',()=>{ window._cd=document.getElementById('cContent').innerHTML; });
-        documen
+    <script src="site.js"></script>
+</body>
+</html>
