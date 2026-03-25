@@ -1,4 +1,4 @@
-<!-- f4u574.zip — v3.0 restructured -->
+<!-- f4u574.zip — v3.5 twin columns + lowercase + dark dot -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,44 +12,52 @@
 </head>
 <body>
 
-    <!-- HEADER -->
+    <!-- LINE 1 — three invisible columns matching layout below -->
     <header class="site-header">
-        <div class="h-left">
-            <button class="burger" onclick="document.getElementById('navPane').classList.toggle('mobile-open')"><span></span><span></span><span></span></button>
-            <span>f4u574.zip</span>
-            <button class="h-btn" onclick="togglePane('nav')" title="Toggle navigation">&#x25EB;</button>
+        <div class="h-nav" id="hColNav">
+            <span class="h-name">f4u574.zip</span>
+            <span class="h-toggle" id="hNavToggle" onclick="toggleNav()"><svg width="6" height="9" viewBox="0 0 8 12" style="display:block;"><path d="M7 1L2 6L7 11" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </div>
-        <div class="h-center">
-            independent postdisciplinary research project of&nbsp;&nbsp;<span class="author">fausta rheia mikutait&#x0117;</span>
+        <div class="h-stream">
+            <span class="h-desc"><span class="h-desc-text">field notes from worlding in common by </span><span class="h-author">fausta rheia mikutait&#x0117;</span></span>
         </div>
-        <div class="h-right">
-            <a href="mailto:hello@f4u574.zip">hello@f4u574.zip</a>
-            <a href="#">ig</a>
-            <a href="#">substack</a>
-            <a href="#">github</a>
+        <div class="h-comp" id="hColComp">
+            <span class="h-search" id="hSearch" onclick="toggleSearch()">search</span>
+            <div class="h-comp-right">
+                <a class="h-email" href="mailto:f4u574@gmail.com">f4u574@gmail.com</a>
+                <span class="h-dark" onclick="toggleDark()"><svg width="8" height="8" viewBox="0 0 8 8" style="display:block;"><circle cx="4" cy="4" r="4" fill="currentColor"/></svg></span>
+                <span class="h-toggle" id="hCompToggle" onclick="toggleComp()"><svg width="6" height="9" viewBox="0 0 8 12" style="display:block;"><path d="M1 1L6 6L1 11" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
         </div>
     </header>
 
-    <!-- LAYOUT -->
+    <!-- LINE 2 + CONTENT — three-column layout -->
     <div class="layout">
 
         <!-- NAV -->
         <aside class="nav-pane" id="navPane">
-            <div class="nav-cat" onclick="tCat('text')"><span class="ti" id="i-text">v</span> text</div>
-            <ul class="nav-list" id="l-text"></ul>
-            <div class="nav-cat" onclick="tCat('image')"><span class="ti" id="i-image">></span> image</div>
-            <ul class="nav-list collapsed" id="l-image"></ul>
-            <div class="nav-cat" onclick="tCat('video')"><span class="ti" id="i-video">></span> video</div>
-            <ul class="nav-list collapsed" id="l-video"></ul>
-            <div class="nav-cat" onclick="tCat('sound')"><span class="ti" id="i-sound">></span> sound</div>
-            <ul class="nav-list collapsed" id="l-sound"></ul>
+            <div class="nav-bar">
+                <span>last mod.</span>
+                <span id="navDate">03/19/26 10:19</span>
+                <span class="nav-bar-loc">vilnius, LT</span>
+            </div>
+            <div class="nav-scroll">
+                <div class="nav-cat" onclick="tCat('text')"><span class="ti" id="i-text">v</span> text</div>
+                <ul class="nav-list" id="l-text"></ul>
+                <div class="nav-cat" onclick="tCat('image')"><span class="ti" id="i-image">></span> image</div>
+                <ul class="nav-list collapsed" id="l-image"></ul>
+                <div class="nav-cat" onclick="tCat('video')"><span class="ti" id="i-video">></span> video</div>
+                <ul class="nav-list collapsed" id="l-video"></ul>
+                <div class="nav-cat" onclick="tCat('sound')"><span class="ti" id="i-sound">></span> sound</div>
+                <ul class="nav-list collapsed" id="l-sound"></ul>
+            </div>
         </aside>
 
         <!-- STREAM -->
         <div class="stream-pane">
             <div class="s-filter-wrap">
                 <div class="stream-bar">
-                    <span class="stream-bar-label" onclick="tFM()" id="sfLabel">All</span>
+                    <span class="stream-bar-label" onclick="tFM()" id="sfLabel">all</span>
                     <button class="stream-bar-btn" onclick="tFM()">&#x2261;</button>
                 </div>
                 <div class="s-filter-dd" id="fDD">
@@ -66,37 +74,35 @@
             <div class="stream-scroll" id="sScroll"></div>
         </div>
 
-        <!-- COMPANION -->
+        <!-- COMPANION (twin of stream) -->
         <aside class="comp-pane" id="compPane">
-            <div class="comp-bar">
-                <div class="comp-bar-left">
-                    <button class="cb-btn" id="cBack" onclick="rC()" style="display:none;">&#x2190;</button>
-                    <span id="cTitle">Index</span>
-                </div>
-                <div class="comp-bar-right">
-                    <span class="cb-btn" onclick="togglePane('comp')" style="font-size:11px;">(Close)</span>
-                    <button class="cb-btn" onclick="togglePane('comp')" title="Toggle companion" style="font-size:13px;">&#x25EB;</button>
-                </div>
-            </div>
-            <div class="comp-scroll" id="cContent">
-                <div id="cDefault">
-                    <div class="cc" onclick="fC('text')"><span class="ti">></span> text</div>
-                    <div class="cc" onclick="fC('image')"><span class="ti">></span> image</div>
-                    <div class="cc" onclick="fC('video')"><span class="ti">></span> video</div>
-                    <div class="cc" onclick="fC('sound')"><span class="ti">></span> sound</div>
-                    <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:12px;">
-                        <div class="dl">stream · 03 19</div>
-                        <div class="df dk">metanoia</div>
-                        <div class="df" style="display:flex;align-items:center;gap:8px;"><div style="width:70px;height:45px;background:#111;flex-shrink:0;"></div><span class="dc">2022 kovo 5</span></div>
-                        <div class="df dc">53.3498 N 6.2603 W</div>
-                        <div class="df dr">bertolucci's dreamers</div>
-                        <div class="df" style="font-size:11px;">miegančių drugelių tvirtovė</div>
-                        <div class="df" style="font-family:var(--mono);">F#A#infinity</div>
-                        <div class="df" style="font-size:9px;color:var(--accent);">viskas (nuo patirčių iki minčių, o man tai viena) stimuliuoja labiau nei manau</div>
-                        <div class="df dq" style="margin-top:6px;">"Né Vélnio Nebijau"</div>
+            <div class="c-filter-wrap">
+                <div class="comp-bar" id="compBar">
+                    <!-- Normal mode -->
+                    <div class="comp-bar-left comp-bar-normal">
+                        <span class="stream-bar-label" onclick="tCFM()" id="cfLabel">all</span>
                     </div>
+                    <div class="comp-bar-right comp-bar-normal">
+                        <span class="comp-close" onclick="toggleComp()">(close)</span>
+                        <button class="stream-bar-btn" onclick="tCFM()">&#x2261;</button>
+                    </div>
+                    <!-- Search mode (hidden by default) -->
+                    <input class="comp-search-input comp-bar-search" id="compSearchInput" type="text">
+                    <span class="comp-search-enter comp-bar-search" onclick="doSearch()">enter</span>
+                </div>
+                <div class="c-filter-dd" id="cDD">
+                    <span class="c-fo active" onclick="cF('all')">all</span>
+                    <span class="c-fo" onclick="cF('text')">text</span>
+                    <span class="c-fo" onclick="cF('image')">image</span>
+                    <span class="c-fo" onclick="cF('video')">video</span>
+                    <span class="c-fo" onclick="cF('sound')">sound</span>
+                    <span class="c-fo" onclick="cF('research')">research</span>
+                    <span class="c-fo" onclick="cF('novel')">novel</span>
+                    <span class="c-fo" onclick="cF('systems')">systems</span>
                 </div>
             </div>
+            <div class="comp-scroll" id="cScroll"></div>
+            <div class="comp-results" id="cSearchResults"></div>
         </aside>
     </div>
 

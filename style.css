@@ -21,49 +21,130 @@ a:hover { color: var(--hover); }
 ::-webkit-scrollbar { display: none; }
 * { scrollbar-width: none; }
 
-/* === HEADER === */
+/* ============================================================
+   LINE 1 — HEADER
+   Three flex children mirroring the layout columns exactly.
+   Transparent borders match the visible column borders below,
+   ensuring identical box-model math for pixel-perfect alignment.
+   ============================================================ */
 .site-header {
     position: fixed; top: 0; left: 0; right: 0;
-    height: 32px;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 16px;
-    font-family: var(--mono); font-size: 12px;
+    height: 40px;
+    display: flex;
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    line-height: 40px;
     background: var(--bg); z-index: 100;
     border-bottom: 1px solid var(--border);
     transition: background 0.3s;
+    white-space: nowrap;
 }
-.h-left { display: flex; align-items: center; gap: 10px; }
-.h-center {
-    position: absolute; left: 50%; transform: translateX(-50%);
-    color: var(--accent); white-space: nowrap; font-size: 12px;
-}
-.h-center .author { color: var(--fg); }
-.h-right { display: flex; gap: 10px; color: var(--accent); }
-.h-right a { color: var(--accent); }
-.h-right a:hover { color: var(--fg); }
-.h-btn {
-    background: none; border: none; cursor: pointer;
-    font-family: var(--mono); font-size: 12px; color: var(--fg);
-    padding: 0; transition: color 0.15s;
-}
-.h-btn:hover { color: var(--accent); }
 
-/* === LAYOUT === */
+/* Nav zone — same width + border model as .nav-pane
+   NO padding on the flex item — padding goes on children via margin.
+   This prevents padding from skewing flex:1 distribution (flex algorithm
+   reserves padding as minimum size before distributing free space). */
+.h-nav {
+    width: 24%; min-width: 220px; max-width: 320px;
+    flex-shrink: 0;
+    display: flex; align-items: center; height: 100%;
+    border-right: 1px solid transparent; /* same box model as nav-pane border */
+    overflow: hidden;
+    transition: width 0.3s, min-width 0.3s;
+}
+/* Stream zone — same flex as .stream-pane, NO padding */
+.h-stream {
+    flex: 1;
+    display: flex; align-items: center; height: 100%;
+    min-width: 0;
+}
+
+/* Companion zone — fixed width, matches .comp-pane below */
+.h-comp {
+    width: 38%; flex: 0 0 auto;
+    display: flex; align-items: center; height: 100%;
+    border-left: 1px solid transparent; /* same box model as comp-pane border */
+    min-width: 0;
+    overflow: hidden;
+}
+.h-comp .h-search { margin-left: 24px; } /* matches comp-bar padding-left */
+.h-comp-right {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+}
+.h-comp-right .h-email { margin-right: 46px; } /* 56px total visual gap (46 + 10px gap) */
+.h-comp-right .h-toggle { padding-left: 0; padding-right: 16px; } /* glyph inset matches comp-bar padding-right */
+
+/* Header elements */
+.h-name { color: var(--fg); flex-shrink: 0; margin-left: 16px; } /* matches nav-bar padding-left */
+
+/* Toggle arrows — pushed to column edges via margin-left:auto */
+.h-toggle {
+    margin-left: auto;
+    flex-shrink: 0;
+    display: flex; align-items: center;
+    height: 100%;
+    padding-left: 10px; /* click area on the inner side */
+    /* NO padding-right — glyph flush against column border */
+    color: var(--fg); cursor: pointer;
+    user-select: none; transition: color 0.15s;
+}
+.h-toggle:hover { color: var(--accent); }
+
+.h-desc {
+    color: var(--accent); flex: 1; min-width: 0;
+    overflow: hidden; text-overflow: ellipsis;
+    margin: 0 24px; /* matches stream-bar padding */
+}
+.h-author { color: var(--fg); font-weight: 500; }
+.h-search {
+    color: var(--accent); cursor: pointer; flex-shrink: 0;
+    transition: color 0.15s;
+}
+.h-search:hover { color: var(--fg); }
+.h-search.active { color: var(--fg); }
+.h-email { color: var(--accent); flex-shrink: 0; }
+.h-email:hover { color: var(--fg); }
+.h-dark {
+    color: var(--fg); cursor: pointer; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.15s; user-select: none;
+}
+.h-dark:hover { color: var(--accent); }
+
+/* ============================================================
+   LAYOUT — LINE 2 sub-bars + content
+   Columns start here. Visible vertical borders.
+   ============================================================ */
 .layout {
     display: flex; position: fixed;
-    top: 32px; left: 0; right: 0; bottom: 0;
+    top: 40px; left: 0; right: 0; bottom: 0;
 }
 
 /* === NAV === */
 .nav-pane {
     width: 24%; min-width: 220px; max-width: 320px;
     border-right: 1px solid var(--border);
-    overflow-y: auto; padding: 12px 16px;
-    transition: width 0.3s, min-width 0.3s, padding 0.3s, opacity 0.2s;
+    display: flex; flex-direction: column;
+    flex-shrink: 0;
+    transition: width 0.3s, min-width 0.3s, opacity 0.2s;
 }
 .nav-pane.collapsed {
-    width: 0; min-width: 0; padding: 0; opacity: 0;
+    width: 0; min-width: 0; opacity: 0;
     border-right: none; overflow: hidden;
+}
+
+/* Nav sub-bar (line 2) — padding-left matches nav-scroll */
+.nav-bar {
+    height: 32px; display: flex; align-items: center;
+    padding: 0 16px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    font-family: var(--mono); font-size: 12px; color: var(--accent);
+    gap: 6px; white-space: nowrap; overflow: hidden;
+}
+.nav-bar-loc { margin-left: auto; flex-shrink: 0; }
+
+.nav-scroll {
+    flex: 1; overflow-y: auto; padding: 12px 16px;
 }
 .nav-cat {
     margin-bottom: 3px; cursor: pointer; user-select: none;
@@ -83,9 +164,11 @@ a:hover { color: var(--hover); }
 
 /* === STREAM === */
 .stream-pane { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+/* Stream sub-bar (line 2) — padding matches entry content & header stream zone */
 .stream-bar {
     height: 32px; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    padding: 0 24px; border-bottom: 1px solid var(--border); flex-shrink: 0;
     font-family: var(--mono); font-size: 12px;
 }
 .stream-bar-label { cursor: pointer; }
@@ -102,22 +185,23 @@ a:hover { color: var(--hover); }
 .s-filter-dd {
     display: none; position: absolute; top: 100%; left: 0; right: 0;
     background: var(--bg); border-bottom: 1px solid var(--border);
-    padding: 8px 20px; z-index: 50; font-family: var(--mono); font-size: 11px;
+    padding: 8px 24px; z-index: 50; font-family: var(--mono); font-size: 11px;
 }
 .s-filter-dd.open { display: flex; flex-wrap: wrap; gap: 4px 12px; }
 .s-fo { cursor: pointer; color: var(--accent); padding: 2px 0; }
 .s-fo:hover { color: var(--fg); }
 .s-fo.active { color: var(--fg); font-weight: 600; }
 
-/* entries */
+/* entries — left padding matches stream-bar & header stream zone */
 .se {
     padding: 24px 24px 28px; border-bottom: 1px solid var(--border);
+    transition: padding 0.3s;
 }
 .se-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
 .se-title { font-size: 13px; font-weight: 400; }
 .se-date { font-size: 10px; color: var(--accent); font-family: var(--mono); white-space: nowrap; }
 .se-meta { font-size: 10px; color: var(--light); margin-top: 2px; font-family: var(--mono); }
-.se-body { max-width: 640px; }
+.se-body { max-width: 640px; transition: max-width 0.3s; }
 .se-body p { margin-bottom: 1.1rem; }
 .se-body .bi { padding-left: 14px; margin-bottom: 1.1rem; position: relative; }
 .se-body .bi::before { content: '•'; position: absolute; left: 0; }
@@ -133,12 +217,28 @@ a:hover { color: var(--hover); }
 .cl { cursor: pointer; border-bottom: 1px dotted var(--accent); }
 .cl:hover { color: var(--fg); border-color: var(--fg); }
 
+/* --- Stream layout when nav is collapsed — centered text, ~80px side space --- */
+.nav-pane.collapsed ~ .stream-pane .se { padding: 28px 80px 32px; }
+.nav-pane.collapsed ~ .stream-pane .se-body { max-width: 900px; margin-left: auto; margin-right: auto; }
+.nav-pane.collapsed ~ .stream-pane .se-head { max-width: 900px; margin-left: auto; margin-right: auto; margin-bottom: 16px; }
+.nav-pane.collapsed ~ .stream-pane .se-tags,
+.nav-pane.collapsed ~ .stream-pane .se-refs { max-width: 900px; margin-left: auto; margin-right: auto; }
+.nav-pane.collapsed ~ .stream-pane .stream-bar { padding: 0 80px; }
+.nav-pane.collapsed ~ .stream-pane .s-filter-dd { padding: 8px 80px; }
+
 /* === COMPANION === */
-.comp-pane { flex: 1; display: flex; flex-direction: column; border-left: 1px solid var(--border); overflow: hidden; transition: flex 0.3s, opacity 0.2s; }
-.comp-pane.collapsed { flex: 0 0 0; min-width: 0; opacity: 0; border-left: none; overflow: hidden; }
+.comp-pane {
+    width: 38%; flex: 0 0 auto;
+    display: flex; flex-direction: column;
+    border-left: 1px solid var(--border);
+    overflow: hidden; transition: width 0.3s, opacity 0.2s;
+}
+.comp-pane.collapsed { width: 0; min-width: 0; opacity: 0; border-left: none; overflow: hidden; }
+
+/* Companion sub-bar (line 2) — now mirrors stream-bar */
 .comp-bar {
     height: 32px; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 16px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    padding: 0 24px; border-bottom: 1px solid var(--border); flex-shrink: 0;
     font-family: var(--mono); font-size: 12px;
 }
 .comp-bar-left { display: flex; align-items: center; gap: 6px; }
@@ -148,7 +248,47 @@ a:hover { color: var(--hover); }
     font-family: var(--mono); font-size: 12px; color: var(--accent); padding: 0;
 }
 .cb-btn:hover { color: var(--fg); }
-.comp-scroll { flex: 1; overflow-y: auto; padding: 12px 16px; }
+.comp-scroll { flex: 1; overflow-y: auto; }
+
+/* companion filter dropdown (mirrors stream) */
+.c-filter-wrap { position: relative; flex-shrink: 0; }
+.c-filter-dd {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+    padding: 8px 24px; z-index: 50; font-family: var(--mono); font-size: 11px;
+}
+.c-filter-dd.open { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.c-fo { cursor: pointer; color: var(--accent); padding: 2px 0; }
+.c-fo:hover { color: var(--fg); }
+.c-fo.active { color: var(--fg); font-weight: 600; }
+
+/* companion close button */
+.comp-close {
+    font-size: 11px; color: var(--accent); cursor: pointer;
+    font-family: var(--mono); transition: color 0.15s;
+}
+.comp-close:hover { color: var(--fg); }
+
+/* companion search results overlay */
+.comp-results { flex: 1; overflow-y: auto; padding: 12px 24px; display: none; }
+.comp-pane.search-active #cScroll { display: none; }
+.comp-pane.search-active .comp-results { display: block; }
+
+/* companion search mode */
+.comp-bar-search { display: none; }
+.comp-bar.search-mode .comp-bar-normal { display: none; }
+.comp-bar.search-mode .comp-bar-search { display: flex; }
+.comp-search-input {
+    flex: 1; min-width: 0;
+    font-family: var(--mono); font-size: 12px;
+    background: none; border: none; color: var(--fg); outline: none;
+    padding: 0;
+}
+.comp-search-enter {
+    flex-shrink: 0; color: var(--accent); cursor: pointer;
+    font-family: var(--mono); font-size: 11px;
+}
+.comp-search-enter:hover { color: var(--fg); }
 
 .cc { margin-bottom: 3px; cursor: pointer; user-select: none; font-size: 12px; font-family: var(--mono); }
 .cc:hover { color: var(--hover); }
@@ -172,17 +312,15 @@ a:hover { color: var(--hover); }
 .dr { font-size: 10px; color: var(--accent); }
 .dq { font-style: italic; font-size: 14px; line-height: 1.3; font-family: Georgia, serif; }
 
-/* === BURGER (mobile) === */
-.burger { display: none; background: none; border: none; cursor: pointer; padding: 2px; }
-.burger span { display: block; width: 16px; height: 1px; background: var(--fg); margin: 3px 0; }
-
+/* === MOBILE === */
 @media (max-width: 900px) {
-    .burger { display: block; }
-    .h-center { display: none; }
     .comp-pane { display: none; }
+    .h-comp { display: none; }
+    .h-desc-text { display: none; }
+    .h-nav { width: auto; min-width: 0; border-right: none; }
     .nav-pane {
-        position: fixed; top: 32px; left: -100%;
-        width: 85%; max-width: 280px; height: calc(100vh - 32px);
+        position: fixed; top: 40px; left: -100%;
+        width: 85%; max-width: 280px; height: calc(100vh - 40px);
         background: var(--bg); z-index: 150;
         transition: left 0.25s; border-right: 1px solid var(--border);
     }
